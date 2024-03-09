@@ -1,0 +1,32 @@
+unit uDependente;
+
+interface
+  uses
+    UDependente.intf;
+
+  type TDependente = class(TInterfacedObject, IDependente)
+    private
+      FDependeteId  : Integer;
+      FNome         : String;
+      FIdade        : Integer;
+      FUsuarioId    : Integer;
+
+    public
+      function GetDependenteId  : Integer;
+      function GetNome          : String;
+      function GetIdade         : Integer;
+      function GetUsuarioID     : Integer;
+
+      procedure SetNome(const Value: String);
+      procedure SetIDade(const Value: Integer);
+      procedure SetUsuarioID(const Value: Integer);
+
+      property DependenteId : Integer read GetDependenteId;
+      property Nome         : String  read GetNome          write SetNome;
+      property Idade        : Integer read GetIdade         write SetIdade;
+      property UsuarioId    : Integer read GetUsuarioId     write SetUsuarioId;
+  end;
+
+implementation
+
+end.
