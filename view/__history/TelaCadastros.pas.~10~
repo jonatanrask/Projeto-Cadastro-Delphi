@@ -1,0 +1,45 @@
+unit TelaCadastros;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, Vcl.ComCtrls,
+  Vcl.StdCtrls, Vcl.Mask, Vcl.DBCtrls;
+
+type
+  TTelaCadastro = class(TForm)
+    PageControl1: TPageControl;
+    AbaCadastro: TTabSheet;
+    Panel1: TPanel;
+    Panel2: TPanel;
+    Panel3: TPanel;
+    LabelCadastros: TLabel;
+    DBLabeledEditNome: TDBLabeledEdit;
+    DBLabeledEditDataNascimento: TDBLabeledEdit;
+    DBLabeledEditEmail: TDBLabeledEdit;
+    DBComboBoxAtivo: TDBComboBox;
+    LabelAtivo: TLabel;
+    Image1: TImage;
+    LabelFoto: TLabel;
+    ButtonEscolherFoto: TButton;
+    DBNavigator1: TDBNavigator;
+    ButtonNovo: TButton;
+    ButtonSalvar: TButton;
+    ButtonLimpar: TButton;
+    ButtonExcluir: TButton;
+    ButtonImprimir: TButton;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  TelaCadastro: TTelaCadastro;
+
+implementation
+
+{$R *.dfm}
+
+end.
