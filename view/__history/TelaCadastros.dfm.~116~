@@ -1,0 +1,578 @@
+object TelaCadastro: TTelaCadastro
+  Left = 0
+  Top = 0
+  Caption = 'Cadastrar Usu'#225'rio'
+  ClientHeight = 651
+  ClientWidth = 904
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -12
+  Font.Name = 'Segoe UI'
+  Font.Style = []
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
+  TextHeight = 15
+  object PageControlUsuario: TPageControl
+    Left = -2
+    Top = 0
+    Width = 833
+    Height = 457
+    ActivePage = AbaCadastro
+    TabOrder = 0
+    OnChange = PageControlUsuarioChange
+    object AbaCadastro: TTabSheet
+      Caption = 'Cadastro'
+      object Panel1: TPanel
+        Left = 0
+        Top = 3
+        Width = 825
+        Height = 49
+        TabOrder = 0
+        object LabelCadastros: TLabel
+          Left = 16
+          Top = 11
+          Width = 95
+          Height = 30
+          Caption = 'Cadastros'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -21
+          Font.Name = 'Segoe UI'
+          Font.Style = [fsBold]
+          ParentFont = False
+        end
+      end
+      object Panel2: TPanel
+        Left = 0
+        Top = 58
+        Width = 825
+        Height = 272
+        TabOrder = 1
+        object LabelAtivo: TLabel
+          Left = 16
+          Top = 219
+          Width = 28
+          Height = 15
+          Caption = 'Ativo'
+        end
+        object ImageFoto: TImage
+          Left = 576
+          Top = 51
+          Width = 121
+          Height = 145
+          Proportional = True
+          Stretch = True
+        end
+        object LabelFoto: TLabel
+          Left = 576
+          Top = 30
+          Width = 24
+          Height = 15
+          Caption = 'Foto'
+        end
+        object DBLabeledEditNome: TDBLabeledEdit
+          Left = 16
+          Top = 48
+          Width = 505
+          Height = 23
+          DataField = 'Nome'
+          DataSource = DataSourceUsuario
+          TabOrder = 0
+          OnExit = DBLabeledEditNomeExit
+          EditLabel.Width = 33
+          EditLabel.Height = 15
+          EditLabel.Caption = 'Nome'
+          EditLabel.Layout = tlCenter
+        end
+        object DBLabeledEditDataNascimento: TDBLabeledEdit
+          Left = 16
+          Top = 113
+          Width = 505
+          Height = 23
+          DataField = 'DataNascimento'
+          DataSource = DataSourceUsuario
+          TabOrder = 1
+          OnExit = DBLabeledEditDataNascimentoExit
+          EditLabel.Width = 107
+          EditLabel.Height = 15
+          EditLabel.Caption = 'Data de Nascimento'
+          EditLabel.Layout = tlCenter
+        end
+        object DBLabeledEditEmail: TDBLabeledEdit
+          Left = 16
+          Top = 179
+          Width = 505
+          Height = 23
+          DataField = 'Email'
+          DataSource = DataSourceUsuario
+          TabOrder = 2
+          OnExit = DBLabeledEditEmailExit
+          EditLabel.Width = 34
+          EditLabel.Height = 15
+          EditLabel.Caption = 'E-Mail'
+          EditLabel.Layout = tlCenter
+        end
+        object ButtonEscolherFoto: TButton
+          Left = 576
+          Top = 226
+          Width = 121
+          Height = 28
+          Caption = 'Escolher Foto'
+          Enabled = False
+          TabOrder = 4
+          OnClick = ButtonEscolherFotoClick
+        end
+        object DBComboBoxAtivo: TDBComboBox
+          Left = 16
+          Top = 240
+          Width = 145
+          Height = 23
+          Style = csDropDownList
+          DataField = 'Ativo'
+          DataSource = DataSourceUsuario
+          Items.Strings = (
+            'Ativo'
+            'Inativo')
+          TabOrder = 3
+          OnExit = DBComboBoxAtivoExit
+        end
+      end
+      object Panel3: TPanel
+        Left = 0
+        Top = 336
+        Width = 825
+        Height = 88
+        TabOrder = 2
+        object DBNavigator1: TDBNavigator
+          Left = 308
+          Top = 10
+          Width = 224
+          Height = 25
+          VisibleButtons = [nbFirst, nbPrior, nbNext, nbLast]
+          TabOrder = 0
+        end
+        object ButtonNovo: TButton
+          Left = 16
+          Top = 44
+          Width = 121
+          Height = 37
+          Caption = 'Novo'
+          TabOrder = 1
+          OnClick = ButtonNovoClick
+        end
+        object ButtonSalvar: TButton
+          Left = 159
+          Top = 44
+          Width = 121
+          Height = 37
+          Caption = 'Salvar'
+          Enabled = False
+          TabOrder = 2
+          OnClick = ButtonSalvarClick
+        end
+        object ButtonLimpar: TButton
+          Left = 300
+          Top = 44
+          Width = 121
+          Height = 37
+          Caption = 'Limpar'
+          Enabled = False
+          TabOrder = 3
+          OnClick = ButtonLimparClick
+        end
+        object ButtonExcluir: TButton
+          Left = 585
+          Top = 44
+          Width = 121
+          Height = 37
+          Caption = 'Excluir'
+          Enabled = False
+          TabOrder = 4
+        end
+        object ButtonImprimir: TButton
+          Left = 442
+          Top = 44
+          Width = 121
+          Height = 37
+          Caption = 'Imprimir'
+          Enabled = False
+          TabOrder = 5
+        end
+      end
+    end
+    object TabSheetDependentes: TTabSheet
+      Caption = 'Dependentes'
+      ImageIndex = 1
+      object Panel4: TPanel
+        Left = 0
+        Top = 3
+        Width = 825
+        Height = 46
+        TabOrder = 0
+        object LabelCadastroDependente: TLabel
+          Left = 16
+          Top = 8
+          Width = 259
+          Height = 30
+          Caption = 'Cadastros de Dependentes'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -21
+          Font.Name = 'Segoe UI'
+          Font.Style = [fsBold]
+          ParentFont = False
+        end
+      end
+      object Panel5: TPanel
+        Left = 0
+        Top = 55
+        Width = 825
+        Height = 261
+        TabOrder = 1
+        object DBLabeledEditNomeDependente: TDBLabeledEdit
+          Left = 24
+          Top = 32
+          Width = 313
+          Height = 23
+          DataField = 'Nome'
+          DataSource = DataSourceDependente
+          TabOrder = 0
+          OnExit = DBLabeledEditNomeDependenteExit
+          EditLabel.Width = 33
+          EditLabel.Height = 15
+          EditLabel.Caption = 'Nome'
+          EditLabel.Layout = tlCenter
+        end
+        object DBLabeledEditIdadeEntidade: TDBLabeledEdit
+          Left = 352
+          Top = 32
+          Width = 53
+          Height = 23
+          DataField = 'Idade'
+          DataSource = DataSourceDependente
+          TabOrder = 1
+          OnExit = DBLabeledEditIdadeEntidadeExit
+          EditLabel.Width = 29
+          EditLabel.Height = 15
+          EditLabel.Caption = 'Idade'
+          EditLabel.Layout = tlCenter
+        end
+        object ButtonAdicionarDependente: TButton
+          Left = 442
+          Top = 21
+          Width = 121
+          Height = 37
+          Caption = 'Adicionar'
+          TabOrder = 2
+          OnClick = ButtonAdicionarDependenteClick
+        end
+        object ButtonRemover: TButton
+          Left = 585
+          Top = 21
+          Width = 121
+          Height = 37
+          Caption = 'Remover'
+          TabOrder = 3
+          OnClick = ButtonRemoverClick
+        end
+        object DBGridDependente: TDBGrid
+          Left = 0
+          Top = 61
+          Width = 825
+          Height = 200
+          DataSource = DataSourceDependente
+          TabOrder = 4
+          TitleFont.Charset = DEFAULT_CHARSET
+          TitleFont.Color = clWindowText
+          TitleFont.Height = -12
+          TitleFont.Name = 'Segoe UI'
+          TitleFont.Style = []
+          Columns = <
+            item
+              Expanded = False
+              Title.Caption = 'Nome'
+              Visible = True
+            end
+            item
+              Expanded = False
+              Title.Caption = 'Idade'
+              Visible = True
+            end>
+        end
+      end
+      object Panel6: TPanel
+        Left = 0
+        Top = 322
+        Width = 825
+        Height = 105
+        TabOrder = 2
+        object DBNavigator2: TDBNavigator
+          Left = 308
+          Top = 13
+          Width = 224
+          Height = 25
+          VisibleButtons = [nbFirst, nbPrior, nbNext, nbLast]
+          TabOrder = 0
+        end
+        object Button2: TButton
+          Left = 16
+          Top = 49
+          Width = 121
+          Height = 37
+          Caption = 'Novo'
+          TabOrder = 1
+        end
+        object Button3: TButton
+          Left = 159
+          Top = 49
+          Width = 121
+          Height = 37
+          Caption = 'Salvar'
+          TabOrder = 2
+        end
+        object Button4: TButton
+          Left = 300
+          Top = 49
+          Width = 121
+          Height = 37
+          Caption = 'Limpar'
+          TabOrder = 3
+        end
+        object Button5: TButton
+          Left = 585
+          Top = 49
+          Width = 121
+          Height = 37
+          Caption = 'Excluir'
+          TabOrder = 4
+        end
+        object Button6: TButton
+          Left = 442
+          Top = 49
+          Width = 121
+          Height = 37
+          Caption = 'Imprimir'
+          TabOrder = 5
+        end
+      end
+    end
+    object TabSheetListaCadastro: TTabSheet
+      Caption = 'Lista dos Cadastrados'
+      ImageIndex = 2
+      object Panel7: TPanel
+        Left = 0
+        Top = 320
+        Width = 825
+        Height = 105
+        TabOrder = 0
+        object DBNavigator3: TDBNavigator
+          Left = 0
+          Top = 77
+          Width = 824
+          Height = 25
+          VisibleButtons = [nbFirst, nbPrior, nbNext, nbLast]
+          TabOrder = 0
+        end
+      end
+      object Panel8: TPanel
+        Left = 0
+        Top = 55
+        Width = 825
+        Height = 346
+        TabOrder = 1
+        object DBGridListaUsu: TDBGrid
+          Left = 0
+          Top = 0
+          Width = 825
+          Height = 343
+          DataSource = DataSourceListaUsuario
+          TabOrder = 0
+          TitleFont.Charset = DEFAULT_CHARSET
+          TitleFont.Color = clWindowText
+          TitleFont.Height = -12
+          TitleFont.Name = 'Segoe UI'
+          TitleFont.Style = []
+          OnDblClick = DBGridListaUsuDblClick
+          Columns = <
+            item
+              Expanded = False
+              FieldName = 'Nome'
+              Width = 250
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'Email'
+              Width = 250
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'DataNascimento'
+              Title.Caption = 'Data Nascimento'
+              Width = 120
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'Ativo'
+              Width = 50
+              Visible = True
+            end>
+        end
+      end
+      object Panel9: TPanel
+        Left = 0
+        Top = 0
+        Width = 825
+        Height = 49
+        TabOrder = 2
+        object LabelListaUsu: TLabel
+          Left = 16
+          Top = 11
+          Width = 165
+          Height = 30
+          Caption = 'Lista de Usu'#225'rios'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -21
+          Font.Name = 'Segoe UI'
+          Font.Style = [fsBold]
+          ParentFont = False
+        end
+        object ComboBoxFiltroAtivo: TComboBox
+          Left = 416
+          Top = 12
+          Width = 145
+          Height = 23
+          Hint = 'Escolha'
+          Style = csDropDownList
+          TabOrder = 0
+          Items.Strings = (
+            'Todos'
+            'Ativo'
+            'Inativo')
+        end
+        object EditPalavraChaveFiltro: TEdit
+          Left = 567
+          Top = 12
+          Width = 121
+          Height = 23
+          Hint = 'Busca Por Palavra Chave'
+          TabOrder = 1
+          Text = 'EditPalavraChaveFiltro'
+        end
+        object Button14: TButton
+          Left = 694
+          Top = 5
+          Width = 121
+          Height = 37
+          Caption = 'Filtrar'
+          TabOrder = 2
+          OnClick = Button14Click
+        end
+      end
+    end
+  end
+  object FDMemTableUsuario: TFDMemTable
+    FetchOptions.AssignedValues = [evMode]
+    FetchOptions.Mode = fmAll
+    ResourceOptions.AssignedValues = [rvSilentMode]
+    ResourceOptions.SilentMode = True
+    UpdateOptions.AssignedValues = [uvCheckRequired, uvAutoCommitUpdates]
+    UpdateOptions.CheckRequired = False
+    UpdateOptions.AutoCommitUpdates = True
+    Left = 57
+    Top = 469
+    object FDMemTableUsuarioNome: TStringField
+      FieldName = 'Nome'
+      Size = 250
+    end
+    object FDMemTableUsuarioDataNascimento: TDateTimeField
+      FieldName = 'DataNascimento'
+      EditMask = '!99/99/0000;1;_'
+    end
+    object FDMemTableUsuarioAtivo: TStringField
+      FieldName = 'Ativo'
+    end
+    object FDMemTableUsuarioUsuarioId: TIntegerField
+      FieldName = 'UsuarioId'
+    end
+    object FDMemTableUsuarioEmail: TWideStringField
+      FieldName = 'Email'
+      Size = 200
+    end
+  end
+  object DataSourceUsuario: TDataSource
+    DataSet = FDMemTableUsuario
+    Left = 145
+    Top = 469
+  end
+  object DataSourceDependente: TDataSource
+    DataSet = FDMemTableDependente
+    Left = 378
+    Top = 469
+  end
+  object FDMemTableDependente: TFDMemTable
+    FetchOptions.AssignedValues = [evMode]
+    FetchOptions.Mode = fmAll
+    ResourceOptions.AssignedValues = [rvSilentMode]
+    ResourceOptions.SilentMode = True
+    UpdateOptions.AssignedValues = [uvCheckRequired, uvAutoCommitUpdates]
+    UpdateOptions.CheckRequired = False
+    UpdateOptions.AutoCommitUpdates = True
+    Left = 282
+    Top = 469
+    object FDMemTableDependenteNome: TStringField
+      FieldName = 'Nome'
+    end
+    object FDMemTableDependenteIdade: TIntegerField
+      FieldName = 'Idade'
+    end
+  end
+  object ADOQueryListaUsuario: TADOQuery
+    Connection = DataModulePrincipal.ADOConnection1
+    CursorType = ctStatic
+    Parameters = <>
+    SQL.Strings = (
+      'SELECT'
+      #9'UsuarioId,'
+      #9'Nome,'
+      #9'Email,'
+      #9'DataNascimento,'
+      #9'Ativo,'
+      #9'Foto'
+      'FROM '
+      '                Usuario')
+    Left = 530
+    Top = 477
+    object ADOQueryListaUsuarioUsuarioID: TAutoIncField
+      FieldName = 'UsuarioID'
+      ReadOnly = True
+    end
+    object ADOQueryListaUsuarioNome: TStringField
+      FieldName = 'Nome'
+      Size = 100
+    end
+    object ADOQueryListaUsuarioEmail: TStringField
+      FieldName = 'Email'
+      Size = 255
+    end
+    object ADOQueryListaUsuarioDataNascimento: TWideStringField
+      FieldName = 'DataNascimento'
+      Size = 10
+    end
+    object ADOQueryListaUsuarioAtivo: TIntegerField
+      FieldName = 'Ativo'
+    end
+    object ADOQueryListaUsuarioFoto: TBlobField
+      FieldName = 'Foto'
+    end
+  end
+  object DataSourceListaUsuario: TDataSource
+    DataSet = ADOQueryListaUsuario
+    Left = 626
+    Top = 478
+  end
+end

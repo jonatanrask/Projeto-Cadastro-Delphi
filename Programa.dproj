@@ -110,6 +110,23 @@
             <Form>TelaCadastro</Form>
             <FormType>dfm</FormType>
         </DCCReference>
+        <DCCReference Include="connection\uUsuarioConexao.pas">
+            <Form>DataModuleUsuario</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TDataModule</DesignClass>
+        </DCCReference>
+        <DCCReference Include="connection\ConexaoPrincipal.pas">
+            <Form>DataModulePrincipal</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TDataModule</DesignClass>
+        </DCCReference>
+        <DCCReference Include="connection\uDependenteConexao.pas">
+            <Form>DataModuleDependente</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TDataModule</DesignClass>
+        </DCCReference>
+        <DCCReference Include="exceptions\uUsuarioExceptions.pas"/>
+        <DCCReference Include="exceptions\uDependenteExceptions.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>

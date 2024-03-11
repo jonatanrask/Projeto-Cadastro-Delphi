@@ -1,0 +1,107 @@
+object DataModuleUsuario: TDataModuleUsuario
+  Height = 132
+  Width = 640
+  object ADOQueryUsuario: TADOQuery
+    Connection = DataModulePrincipal.ADOConnection1
+    CursorType = ctStatic
+    Parameters = <
+      item
+        Name = 'UsuarioId'
+        Attributes = [paSigned]
+        DataType = ftInteger
+        Precision = 10
+        Size = 4
+        Value = Null
+      end>
+    SQL.Strings = (
+      'SELECT'
+      #9'UsuarioId,'
+      #9'Nome,'
+      #9'Email,'
+      #9'FORMAT(DataNascimento, '#39'dd.MM.yyyy'#39') AS DataNascimento,'
+      #9'Ativo,'
+      #9'Foto'
+      'FROM '
+      '                Usuario'
+      'Where '
+      '                UsuarioID = :UsuarioId')
+    Left = 114
+    Top = 45
+    object ADOQueryUsuarioUsuarioID: TAutoIncField
+      FieldName = 'UsuarioID'
+      ReadOnly = True
+    end
+    object ADOQueryUsuarioNome: TStringField
+      FieldName = 'Nome'
+      Size = 100
+    end
+    object ADOQueryUsuarioEmail: TStringField
+      FieldName = 'Email'
+      Size = 255
+    end
+    object ADOQueryUsuarioDataNascimento: TWideStringField
+      FieldName = 'DataNascimento'
+      EditMask = '!99/99/0000;1;_'
+      Size = 10
+    end
+    object ADOQueryUsuarioAtivo: TIntegerField
+      FieldName = 'Ativo'
+    end
+    object ADOQueryUsuarioFoto: TBlobField
+      FieldName = 'Foto'
+    end
+  end
+  object DataSourceUsuario: TDataSource
+    DataSet = ADOQueryUsuario
+    Left = 226
+    Top = 46
+  end
+  object ADOQueryUsuarioDelete: TADOQuery
+    Connection = DataModulePrincipal.ADOConnection1
+    CursorType = ctStatic
+    Parameters = <
+      item
+        Name = 'UsuarioId'
+        Attributes = [paSigned]
+        DataType = ftInteger
+        Precision = 10
+        Size = 4
+        Value = Null
+      end>
+    SQL.Strings = (
+      'DELETE'
+      'FROM'
+      '  Usuario'
+      'WHERE'
+      '  UsuarioID = :UsuarioID;')
+    Left = 362
+    Top = 45
+    object AutoIncField1: TAutoIncField
+      FieldName = 'UsuarioID'
+      ReadOnly = True
+    end
+    object StringField1: TStringField
+      FieldName = 'Nome'
+      Size = 100
+    end
+    object StringField2: TStringField
+      FieldName = 'Email'
+      Size = 255
+    end
+    object WideStringField1: TWideStringField
+      FieldName = 'DataNascimento'
+      Size = 10
+    end
+    object IntegerField1: TIntegerField
+      FieldName = 'Ativo'
+    end
+    object BlobField1: TBlobField
+      FieldName = 'Foto'
+    end
+  end
+  object DataSourceUsuarioDelete: TDataSource
+    DataSet = ADOQueryUsuarioDelete
+    Left = 474
+    Top = 46
+  end
+end

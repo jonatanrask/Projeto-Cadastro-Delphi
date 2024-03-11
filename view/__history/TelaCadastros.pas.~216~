@@ -1,0 +1,373 @@
+unit TelaCadastros;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, Vcl.ComCtrls,
+  Vcl.StdCtrls, Vcl.Mask, Vcl.DBCtrls, Data.DB, Vcl.Grids, Vcl.DBGrids,
+  Data.Win.ADODB, FireDAC.Stan.Intf, FireDAC.Stan.Option, FireDAC.Stan.Param,
+  FireDAC.Stan.Error, FireDAC.DatS, FireDAC.Phys.Intf, FireDAC.DApt.Intf,
+  FireDAC.Comp.DataSet, FireDAC.Comp.Client, uUSuario, Vcl.Imaging.jpeg, uDependente;
+
+type
+  TTelaCadastro = class(TForm)
+    PageControlUsuario: TPageControl;
+    AbaCadastro: TTabSheet;
+    Panel1: TPanel;
+    Panel2: TPanel;
+    Panel3: TPanel;
+    LabelCadastros: TLabel;
+    DBLabeledEditNome: TDBLabeledEdit;
+    DBLabeledEditDataNascimento: TDBLabeledEdit;
+    DBLabeledEditEmail: TDBLabeledEdit;
+    LabelAtivo: TLabel;
+    ImageFoto: TImage;
+    LabelFoto: TLabel;
+    ButtonEscolherFoto: TButton;
+    DBNavigator1: TDBNavigator;
+    ButtonNovo: TButton;
+    ButtonSalvar: TButton;
+    ButtonLimpar: TButton;
+    ButtonExcluir: TButton;
+    ButtonImprimir: TButton;
+    TabSheetDependentes: TTabSheet;
+    Panel4: TPanel;
+    LabelCadastroDependente: TLabel;
+    Panel5: TPanel;
+    DBLabeledEditNomeDependente: TDBLabeledEdit;
+    Panel6: TPanel;
+    DBNavigator2: TDBNavigator;
+    Button2: TButton;
+    Button3: TButton;
+    Button4: TButton;
+    Button5: TButton;
+    Button6: TButton;
+    DBLabeledEditIdadeEntidade: TDBLabeledEdit;
+    ButtonAdicionarDependente: TButton;
+    ButtonRemover: TButton;
+    DBGridDependente: TDBGrid;
+    TabSheetListaCadastro: TTabSheet;
+    Panel7: TPanel;
+    DBNavigator3: TDBNavigator;
+    Panel8: TPanel;
+    DBGridListaUsu: TDBGrid;
+    Panel9: TPanel;
+    LabelListaUsu: TLabel;
+    ComboBoxFiltroAtivo: TComboBox;
+    EditPalavraChaveFiltro: TEdit;
+    Button14: TButton;
+    DBComboBoxAtivo: TDBComboBox;
+    FDMemTableUsuario: TFDMemTable;
+    FDMemTableUsuarioNome: TStringField;
+    FDMemTableUsuarioDataNascimento: TDateTimeField;
+    FDMemTableUsuarioAtivo: TStringField;
+    FDMemTableUsuarioUsuarioId: TIntegerField;
+    FDMemTableUsuarioEmail: TWideStringField;
+    DataSourceUsuario: TDataSource;
+    DataSourceDependente: TDataSource;
+    FDMemTableDependente: TFDMemTable;
+    FDMemTableDependenteNome: TStringField;
+    FDMemTableDependenteIdade: TIntegerField;
+    ADOQueryListaUsuario: TADOQuery;
+    ADOQueryListaUsuarioUsuarioID: TAutoIncField;
+    ADOQueryListaUsuarioNome: TStringField;
+    ADOQueryListaUsuarioEmail: TStringField;
+    ADOQueryListaUsuarioDataNascimento: TWideStringField;
+    ADOQueryListaUsuarioAtivo: TIntegerField;
+    ADOQueryListaUsuarioFoto: TBlobField;
+    DataSourceListaUsuario: TDataSource;
+    procedure ButtonNovoClick(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure ButtonSalvarClick(Sender: TObject);
+    procedure DBLabeledEditNomeExit(Sender: TObject);
+    procedure DBLabeledEditDataNascimentoExit(Sender: TObject);
+    procedure DBLabeledEditEmailExit(Sender: TObject);
+    procedure DBComboBoxAtivoExit(Sender: TObject);
+    procedure ButtonLimparClick(Sender: TObject);
+    procedure ButtonEscolherFotoClick(Sender: TObject);
+    procedure PageControlUsuarioChange(Sender: TObject);
+    procedure Button14Click(Sender: TObject);
+    procedure DBLabeledEditNomeDependenteExit(Sender: TObject);
+    procedure DBLabeledEditIdadeEntidadeExit(Sender: TObject);
+    procedure ButtonAdicionarDependenteClick(Sender: TObject);
+    procedure ButtonRemoverClick(Sender: TObject);
+    procedure DBGridListaUsuDblClick(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+  private
+    { Private declarations }
+    procedure SetaCamposNavegacaoUsuario;
+    procedure SetaCamposAlteracaoUsuario;
+    var
+      Usuario: TUsuario;
+      Dependente: TDependente;
+  public
+    { Public declarations }
+  end;
+
+var
+  TelaCadastro: TTelaCadastro;
+
+implementation
+
+uses
+  Vcl.Imaging.pngimage;
+
+
+{$R *.dfm}
+
+procedure TTelaCadastro.Button14Click(Sender: TObject);
+begin
+  ADOQueryListaUsuario.Filtered := False;
+  ADOQueryListaUsuario.Filter := '';
+  if (ComboBoxFiltroAtivo.ItemIndex >= 0) and (ComboBoxFiltroAtivo.ItemIndex < ComboBoxFiltroAtivo.Items.Count) then
+  begin
+    if ComboBoxFiltroAtivo.ItemIndex > 0 then
+      ADOQueryListaUsuario.Filter := 'Ativo = ' + IntToStr(ComboBoxFiltroAtivo.ItemIndex)
+    else
+      ADOQueryListaUsuario.Filter := '';
+
+
+  end;
+
+  if Trim(EditPalavraChaveFiltro.Text) <> '' then
+  begin
+    if ADOQueryListaUsuario.Filter <> '' then
+      ADOQueryListaUsuario.Filter := ADOQueryListaUsuario.Filter + ' AND ';
+
+    ADOQueryListaUsuario.Filter := ADOQueryListaUsuario.Filter +
+      '(Nome LIKE ''%' + EditPalavraChaveFiltro.Text + '%'' OR Email LIKE ''%' + EditPalavraChaveFiltro.Text + '%'')';
+  end;
+
+  ADOQueryListaUsuario.Filtered := True;
+end;
+
+procedure TTelaCadastro.ButtonAdicionarDependenteClick(Sender: TObject);
+begin
+  if (Dependente.Idade > 0) and (Trim(Dependente.Nome) <> '') then
+  begin
+    Dependente.Criar;
+    Usuario.AdicionarDependentes(Dependente);
+    With FDMemTableDependente do
+    begin
+      FDMemTableDependente.Insert;
+      FDMemTableDependente.FieldByName('Nome').AsString    := Dependente.Nome;
+      FDMemTableDependente.FieldByName('idade').AsInteger  := Dependente.Idade;
+      FDMemTableDependente.Post;
+    end;
+  end;
+
+end;
+
+procedure TTelaCadastro.ButtonEscolherFotoClick(Sender: TObject);
+var
+  OpenFileDialog: TOpenDialog;
+begin
+  
+  try
+    OpenFileDialog := TOpenDialog.Create(nil);   
+    OpenFileDialog.Filter := 'Arquivos de Imagem|*.jpg;*.jpeg;';
+    if OpenFileDialog.Execute then
+       ImageFoto.Picture.Graphic.LoadFromFile(OpenFileDialog.FileName);
+  finally
+    OpenFileDialog.Free;
+  end;
+  Usuario.ConverterBytes(ImageFoto, Usuario.Foto);
+end;
+
+procedure TTelaCadastro.ButtonLimparClick(Sender: TObject);
+begin
+  FDMemTableUsuario.Close;
+  FDMemTableUsuario.Open;
+end;
+
+procedure TTelaCadastro.ButtonNovoClick(Sender: TObject);
+begin
+  FDMemTableUsuario.Close;
+  FDMemTableUsuario.Open;
+  FDMemTableUsuario.Insert;
+  SetaCamposAlteracaoUsuario;
+  Usuario.Destroy;
+  Usuario := TUsuario.Create;
+end;
+
+procedure TTelaCadastro.ButtonRemoverClick(Sender: TObject);
+begin
+  if MessageDlg('Deseja remover o dependente?', mtConfirmation, [mbYes, mbNo], 0) = mrYes then
+  begin
+    Dependente.Deletar(Dependente.DependenteId);
+    Usuario.Dependentes.Remove(Dependente);
+    FDMemTableDependente.Delete;
+  end;
+end;
+
+procedure TTelaCadastro.ButtonSalvarClick(Sender: TObject);
+begin
+  if (FDMemTableUsuario.FieldByName('DataNascimento').AsDateTime = 0) or
+     (FDMemTableUsuario.FieldByName('Nome').AsString = '') or
+     (FDMemTableUsuario.FieldByName('Email').AsString = '')
+  then
+    ShowMessage('Campos obrigatórios estão vazio!')
+  else
+  begin
+    Usuario.Criar;
+    FDMemTableUsuario.FieldByName('UsuarioId').AsInteger := Usuario.UsuarioId;
+    FDMemTableUsuario.Post;
+    SetaCamposNavegacaoUsuario;
+    FDMemTableDependente.Close;
+    FDMemTableDependente.Open;
+  end;
+end;
+
+procedure TTelaCadastro.DBComboBoxAtivoExit(Sender: TObject);
+begin
+  if FDMemTableUsuario.FieldByName('Ativo').AsString = 'Ativo' then
+    Usuario.Ativo := 1
+  else
+    Usuario.Ativo := 2;
+  
+end;
+
+procedure TTelaCadastro.DBGridListaUsuDblClick(Sender: TObject);
+begin
+  Usuario.SetaDadosUsuario(DBGridListaUsu.DataSource.DataSet.FieldByName('UsuarioId').AsInteger);
+  if FDMemTableUsuario.RecordCount = 0 then
+    FDMemTableUsuario.Insert
+  else
+    FDMemTableUsuario.Edit;
+
+  FDMemTableUsuario.FieldByName('UsuarioId').AsInteger := Usuario.UsuarioId;
+  FDMemTableUsuario.FieldByName('Nome').AsString := Usuario.Nome;
+  FDMemTableUsuario.FieldByName('Email').AsString := Usuario.Email;
+  FDMemTableUsuario.FieldByName('DataNascimento').AsDateTime := Usuario.DataNascimento;
+  SetaCamposAlteracaoUsuario;
+  Usuario.CarregarImagemDeBytes(Usuario.Foto, ImageFoto);
+  PageControlUsuario.ActivePageIndex := 0;
+end;
+
+procedure TTelaCadastro.DBLabeledEditDataNascimentoExit(Sender: TObject);
+begin
+  try
+    Usuario.DataNascimento := FDMemTableUsuario.FieldByName('DataNascimento').AsDateTime;
+  except
+    FDMemTableUsuario.FieldByName('DataNascimento').AsDateTime := 0;
+  end;
+end;
+
+procedure TTelaCadastro.DBLabeledEditEmailExit(Sender: TObject);
+begin
+  try
+    Usuario.Email := FDMemTableUsuario.FieldByName('Email').AsString;
+  except
+    FDMemTableUsuario.FieldByName('Email').AsString := '';
+  end;
+end;
+
+procedure TTelaCadastro.DBLabeledEditIdadeEntidadeExit(Sender: TObject);
+begin
+  Dependente.Idade := FDMemTableDependente.FieldByName('Idade').AsInteger;
+end;
+
+procedure TTelaCadastro.DBLabeledEditNomeDependenteExit(Sender: TObject);
+begin
+  Dependente.Nome := FDMemTableDependente.FieldByName('Nome').AsString;
+end;
+
+procedure TTelaCadastro.DBLabeledEditNomeExit(Sender: TObject);
+begin
+  Usuario.Nome := FDMemTableUsuario.FieldByName('Nome').AsString;
+end;
+
+procedure TTelaCadastro.FormCreate(Sender: TObject);
+begin
+  FDMemTableUsuario.Open;
+  Usuario := TUsuario.Create;
+  ImageFoto.Picture.Graphic := TJPEGImage.Create;
+end;
+
+procedure TTelaCadastro.FormDestroy(Sender: TObject);
+begin
+  FDMemTableUsuario.Close;
+  FDMemTableDependente.Close;
+  ADOQueryListaUsuario.Close;
+
+  Usuario.Free;
+  Dependente.Free;
+  FDMemTableUsuario.Free;
+  FDMemTableDependente.Free;
+  ADOQueryListaUsuario.Free;
+end;
+
+procedure TTelaCadastro.PageControlUsuarioChange(Sender: TObject);
+var
+  Index: Integer;
+begin
+  if (PageControlUsuario.ActivePageIndex = 1) and (Usuario.UsuarioId = 0) then
+  begin
+    ShowMessage('Para acessar a aba dependentes é necessario ter selecionado um usuário.');
+    PageControlUsuario.ActivePageIndex := 0;
+  end
+  else if PageControlUsuario.ActivePageIndex = 2 then
+  begin
+    ADOQueryListaUsuario.Close;
+    ADOQueryListaUsuario.Open;
+  end
+  else
+  begin
+
+    FDMemTableDependente.Insert;
+      FDMemTableDependente.FieldByName('Nome').AsString    := 'João';
+      FDMemTableDependente.FieldByName('idade').AsInteger  := 12;
+      FDMemTableDependente.Post;
+
+    FDMemTableDependente.Insert;
+    FDMemTableDependente.FieldByName('Nome').AsString    := 'Maria';
+      FDMemTableDependente.FieldByName('idade').AsInteger  := 16;
+      FDMemTableDependente.Post;
+
+      FDMemTableDependente.Insert;
+      FDMemTableDependente.FieldByName('Nome').AsString    := 'Caio';
+      FDMemTableDependente.FieldByName('idade').AsInteger  := 5;
+      FDMemTableDependente.Post;
+   { if (not Assigned(Dependente)) and (Usuario.UsuarioId > 0) then
+    begin
+      Dependente           := Dependente.Create();
+      Dependente.UsuarioId := Usuario.UsuarioId;
+    end;
+    Index := 0;
+    while Index < Usuario.Dependentes.Count do
+    begin
+      FDMemTableDependente.Insert;
+      FDMemTableDependente.FieldByName('Nome').AsString    := Usuario.Dependentes[Index].Nome;
+      FDMemTableDependente.FieldByName('idade').AsInteger  := Usuario.Dependentes[Index].Idade;
+      FDMemTableDependente.Post;
+      Inc(Index);
+    end;      }
+  end;
+end;
+
+procedure TTelaCadastro.SetaCamposAlteracaoUsuario;
+begin
+ DBLabeledEditNome.Enabled           := True;
+ DBLabeledEditDataNascimento.Enabled := True;
+ DBLabeledEditEmail.Enabled          := True;
+ DBComboBoxAtivo.Enabled             := True;
+ ButtonEscolherFoto.Enabled          := True;
+ ButtonNovo.Enabled                  := False;
+ ButtonSalvar.Enabled                := True;
+ ButtonLimpar.Enabled                := True;
+end;
+
+procedure TTelaCadastro.SetaCamposNavegacaoUsuario;
+begin
+ DBLabeledEditNome.Enabled           := False;
+ DBLabeledEditDataNascimento.Enabled := False;
+ DBLabeledEditEmail.Enabled          := False;
+ DBComboBoxAtivo.Enabled             := False;
+ ButtonEscolherFoto.Enabled          := False;
+ ButtonNovo.Enabled                  := True;
+ ButtonSalvar.Enabled                := False;
+ ButtonLimpar.Enabled                := False;
+end;
+
+end.

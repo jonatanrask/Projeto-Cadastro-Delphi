@@ -1,0 +1,56 @@
+object DataModule1: TDataModule1
+  Height = 132
+  Width = 640
+  object ADOQueryUsuario: TADOQuery
+    Connection = DataModulePrincipal.ADOConnection1
+    CursorType = ctStatic
+    Parameters = <
+      item
+        Name = 'UsuarioId'
+        Attributes = [paSigned, paNullable]
+        DataType = ftInteger
+        Precision = 10
+        Size = 4
+        Value = Null
+      end>
+    SQL.Strings = (
+      'SELECT'
+      #9'UsuarioId,'
+      #9'Nome,'
+      #9'Email,'
+      #9'DataNascimento,'
+      #9'Ativo,'
+      #9'Foto'
+      'FROM Usuario'
+      'Where UsuarioID = :UsuarioId')
+    Left = 194
+    Top = 53
+    object ADOQueryUsuarioUsuarioID: TAutoIncField
+      FieldName = 'UsuarioID'
+      ReadOnly = True
+    end
+    object ADOQueryUsuarioNome: TStringField
+      FieldName = 'Nome'
+      Size = 100
+    end
+    object ADOQueryUsuarioEmail: TStringField
+      FieldName = 'Email'
+      Size = 255
+    end
+    object ADOQueryUsuarioDataNascimento: TWideStringField
+      FieldName = 'DataNascimento'
+      Size = 10
+    end
+    object ADOQueryUsuarioAtivo: TIntegerField
+      FieldName = 'Ativo'
+    end
+    object ADOQueryUsuarioFoto: TBlobField
+      FieldName = 'Foto'
+    end
+  end
+  object DataSourceUsuario: TDataSource
+    DataSet = ADOQueryUsuario
+    Left = 306
+    Top = 54
+  end
+end

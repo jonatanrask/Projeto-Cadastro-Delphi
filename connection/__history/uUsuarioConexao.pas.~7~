@@ -1,0 +1,33 @@
+unit uUsuarioConexao;
+
+interface
+
+uses
+  System.SysUtils, System.Classes, Data.DB, Data.Win.ADODB, ConexaoPrincipal;
+
+type
+  TDataModuleUsuario = class(TDataModule)
+    ADOQueryUsuario: TADOQuery;
+    ADOQueryUsuarioUsuarioID: TAutoIncField;
+    ADOQueryUsuarioNome: TStringField;
+    ADOQueryUsuarioEmail: TStringField;
+    ADOQueryUsuarioDataNascimento: TWideStringField;
+    ADOQueryUsuarioAtivo: TIntegerField;
+    ADOQueryUsuarioFoto: TBlobField;
+    DataSourceUsuario: TDataSource;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  DataModuleUsuario: TDataModuleUsuario;
+
+implementation
+
+{%CLASSGROUP 'Vcl.Controls.TControl'}
+
+{$R *.dfm}
+
+end.

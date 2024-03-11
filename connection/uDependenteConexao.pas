@@ -1,0 +1,33 @@
+unit uDependenteConexao;
+
+interface
+
+uses
+  System.SysUtils, System.Classes, ConexaoPrincipal, Data.DB, Data.Win.ADODB;
+
+type
+  TDataModuleDependente = class(TDataModule)
+    ADOQueryDependente: TADOQuery;
+    DataSourceDependente: TDataSource;
+    ADOQueryDependenteDependenteID: TAutoIncField;
+    ADOQueryDependenteUsuarioID: TIntegerField;
+    ADOQueryDependenteNome: TStringField;
+    ADOQueryDependenteIdade: TIntegerField;
+    ADOQueryDependenteDelete: TADOQuery;
+    DataSourceDependenteDelete: TDataSource;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  DataModuleDependente: TDataModuleDependente;
+
+implementation
+
+{%CLASSGROUP 'Vcl.Controls.TControl'}
+
+{$R *.dfm}
+
+end.

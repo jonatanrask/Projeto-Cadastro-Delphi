@@ -2,8 +2,8 @@ object TelaCadastro: TTelaCadastro
   Left = 0
   Top = 0
   Caption = 'Cadastrar Usu'#225'rio'
-  ClientHeight = 459
-  ClientWidth = 830
+  ClientHeight = 458
+  ClientWidth = 828
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -11,14 +11,16 @@ object TelaCadastro: TTelaCadastro
   Font.Name = 'Segoe UI'
   Font.Style = []
   OnCreate = FormCreate
+  OnDestroy = FormDestroy
   TextHeight = 15
-  object PageControl1: TPageControl
+  object PageControlUsuario: TPageControl
     Left = -2
     Top = 0
     Width = 833
     Height = 457
-    ActivePage = AbaCadastro
+    ActivePage = TabSheetDependentes
     TabOrder = 0
+    OnChange = PageControlUsuarioChange
     object AbaCadastro: TTabSheet
       Caption = 'Cadastro'
       object Panel1: TPanel
@@ -54,11 +56,13 @@ object TelaCadastro: TTelaCadastro
           Height = 15
           Caption = 'Ativo'
         end
-        object Image1: TImage
+        object ImageFoto: TImage
           Left = 576
-          Top = 48
-          Width = 169
-          Height = 169
+          Top = 51
+          Width = 121
+          Height = 145
+          Proportional = True
+          Stretch = True
         end
         object LabelFoto: TLabel
           Left = 576
@@ -71,8 +75,11 @@ object TelaCadastro: TTelaCadastro
           Left = 16
           Top = 48
           Width = 505
-          Height = 33
+          Height = 23
+          DataField = 'Nome'
+          DataSource = DataSourceUsuario
           TabOrder = 0
+          OnExit = DBLabeledEditNomeExit
           EditLabel.Width = 33
           EditLabel.Height = 15
           EditLabel.Caption = 'Nome'
@@ -82,8 +89,11 @@ object TelaCadastro: TTelaCadastro
           Left = 16
           Top = 113
           Width = 505
-          Height = 33
+          Height = 23
+          DataField = 'DataNascimento'
+          DataSource = DataSourceUsuario
           TabOrder = 1
+          OnExit = DBLabeledEditDataNascimentoExit
           EditLabel.Width = 107
           EditLabel.Height = 15
           EditLabel.Caption = 'Data de Nascimento'
@@ -93,33 +103,39 @@ object TelaCadastro: TTelaCadastro
           Left = 16
           Top = 179
           Width = 505
-          Height = 33
+          Height = 23
+          DataField = 'Email'
+          DataSource = DataSourceUsuario
           TabOrder = 2
+          OnExit = DBLabeledEditEmailExit
           EditLabel.Width = 34
           EditLabel.Height = 15
           EditLabel.Caption = 'E-Mail'
           EditLabel.Layout = tlCenter
         end
-        object DBComboBoxAtivo: TDBComboBox
-          Left = 16
-          Top = 238
-          Width = 145
-          Height = 23
-          Hint = 'Escolha'
-          Items.Strings = (
-            'Sim'
-            'N'#227'o')
-          ParentShowHint = False
-          ShowHint = True
-          TabOrder = 3
-        end
         object ButtonEscolherFoto: TButton
           Left = 576
-          Top = 229
+          Top = 226
           Width = 121
           Height = 28
           Caption = 'Escolher Foto'
+          Enabled = False
           TabOrder = 4
+          OnClick = ButtonEscolherFotoClick
+        end
+        object DBComboBoxAtivo: TDBComboBox
+          Left = 16
+          Top = 240
+          Width = 145
+          Height = 23
+          Style = csDropDownList
+          DataField = 'Ativo'
+          DataSource = DataSourceUsuario
+          Items.Strings = (
+            'Ativo'
+            'Inativo')
+          TabOrder = 3
+          OnExit = DBComboBoxAtivoExit
         end
       end
       object Panel3: TPanel
@@ -143,6 +159,7 @@ object TelaCadastro: TTelaCadastro
           Height = 37
           Caption = 'Novo'
           TabOrder = 1
+          OnClick = ButtonNovoClick
         end
         object ButtonSalvar: TButton
           Left = 159
@@ -150,7 +167,9 @@ object TelaCadastro: TTelaCadastro
           Width = 121
           Height = 37
           Caption = 'Salvar'
+          Enabled = False
           TabOrder = 2
+          OnClick = ButtonSalvarClick
         end
         object ButtonLimpar: TButton
           Left = 300
@@ -158,7 +177,9 @@ object TelaCadastro: TTelaCadastro
           Width = 121
           Height = 37
           Caption = 'Limpar'
+          Enabled = False
           TabOrder = 3
+          OnClick = ButtonLimparClick
         end
         object ButtonExcluir: TButton
           Left = 585
@@ -166,6 +187,7 @@ object TelaCadastro: TTelaCadastro
           Width = 121
           Height = 37
           Caption = 'Excluir'
+          Enabled = False
           TabOrder = 4
         end
         object ButtonImprimir: TButton
@@ -174,6 +196,7 @@ object TelaCadastro: TTelaCadastro
           Width = 121
           Height = 37
           Caption = 'Imprimir'
+          Enabled = False
           TabOrder = 5
         end
       end
@@ -207,49 +230,58 @@ object TelaCadastro: TTelaCadastro
         Width = 825
         Height = 261
         TabOrder = 1
-        object DBLabeledEdit1: TDBLabeledEdit
+        object DBLabeledEditNomeDependente: TDBLabeledEdit
           Left = 24
           Top = 32
           Width = 313
           Height = 23
+          DataField = 'Nome'
+          DataSource = DataSourceDependente
           TabOrder = 0
+          OnExit = DBLabeledEditNomeDependenteExit
           EditLabel.Width = 33
           EditLabel.Height = 15
           EditLabel.Caption = 'Nome'
           EditLabel.Layout = tlCenter
         end
-        object DBLabeledEditIdade: TDBLabeledEdit
+        object DBLabeledEditIdadeEntidade: TDBLabeledEdit
           Left = 352
           Top = 32
           Width = 53
           Height = 23
+          DataField = 'Idade'
+          DataSource = DataSourceDependente
           TabOrder = 1
+          OnExit = DBLabeledEditIdadeEntidadeExit
           EditLabel.Width = 29
           EditLabel.Height = 15
           EditLabel.Caption = 'Idade'
           EditLabel.Layout = tlCenter
         end
-        object Button1: TButton
+        object ButtonAdicionarDependente: TButton
           Left = 442
-          Top = 25
+          Top = 21
           Width = 121
           Height = 37
           Caption = 'Adicionar'
           TabOrder = 2
+          OnClick = ButtonAdicionarDependenteClick
         end
         object ButtonRemover: TButton
           Left = 585
-          Top = 25
+          Top = 21
           Width = 121
           Height = 37
           Caption = 'Remover'
           TabOrder = 3
+          OnClick = ButtonRemoverClick
         end
-        object DBGrid1: TDBGrid
+        object DBGridDependente: TDBGrid
           Left = 0
           Top = 61
           Width = 825
           Height = 200
+          DataSource = DataSourceDependente
           TabOrder = 4
           TitleFont.Charset = DEFAULT_CHARSET
           TitleFont.Color = clWindowText
@@ -259,12 +291,12 @@ object TelaCadastro: TTelaCadastro
           Columns = <
             item
               Expanded = False
-              Title.Caption = 'Nome'
+              FieldName = 'Nome'
               Visible = True
             end
             item
               Expanded = False
-              Title.Caption = 'Idade'
+              FieldName = 'Idade'
               Visible = True
             end>
         end
@@ -349,80 +381,43 @@ object TelaCadastro: TTelaCadastro
         Width = 825
         Height = 346
         TabOrder = 1
-        object DBLabeledEdit2: TDBLabeledEdit
-          Left = 16
-          Top = 32
-          Width = 313
-          Height = 23
-          TabOrder = 0
-          EditLabel.Width = 33
-          EditLabel.Height = 15
-          EditLabel.Caption = 'Nome'
-          EditLabel.Layout = tlCenter
-        end
-        object DBLabeledEdit3: TDBLabeledEdit
-          Left = 352
-          Top = 32
-          Width = 53
-          Height = 23
-          TabOrder = 1
-          EditLabel.Width = 29
-          EditLabel.Height = 15
-          EditLabel.Caption = 'Idade'
-          EditLabel.Layout = tlCenter
-        end
-        object Button12: TButton
-          Left = 442
-          Top = 25
-          Width = 121
-          Height = 37
-          Caption = 'Adicionar'
-          TabOrder = 2
-        end
-        object Button13: TButton
-          Left = 585
-          Top = 25
-          Width = 121
-          Height = 37
-          Caption = 'Remover'
-          TabOrder = 3
-        end
-        object DBGrid2: TDBGrid
+        object DBGridListaUsu: TDBGrid
           Left = 0
-          Top = 68
+          Top = 0
           Width = 825
-          Height = 275
-          DataSource = DataSource1
-          TabOrder = 4
+          Height = 343
+          DataSource = DataSourceListaUsuario
+          TabOrder = 0
           TitleFont.Charset = DEFAULT_CHARSET
           TitleFont.Color = clWindowText
           TitleFont.Height = -12
           TitleFont.Name = 'Segoe UI'
           TitleFont.Style = []
+          OnDblClick = DBGridListaUsuDblClick
           Columns = <
             item
               Expanded = False
               FieldName = 'Nome'
-              Width = 210
+              Width = 250
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'Email'
+              Width = 250
               Visible = True
             end
             item
               Expanded = False
               FieldName = 'DataNascimento'
               Title.Caption = 'Data Nascimento'
-              Width = 100
+              Width = 120
               Visible = True
             end
             item
               Expanded = False
               FieldName = 'Ativo'
-              Width = 138
-              Visible = True
-            end
-            item
-              Expanded = False
-              FieldName = 'Nome'
-              Title.Caption = 'Ativo'
+              Width = 50
               Visible = True
             end>
         end
@@ -446,27 +441,27 @@ object TelaCadastro: TTelaCadastro
           Font.Style = [fsBold]
           ParentFont = False
         end
-        object ComboBox1: TComboBox
+        object ComboBoxFiltroAtivo: TComboBox
           Left = 416
           Top = 12
           Width = 145
           Height = 23
           Hint = 'Escolha'
+          Style = csDropDownList
           TabOrder = 0
-          Text = 'ComboBox1'
           Items.Strings = (
+            'Todos'
             'Ativo'
-            'Inativo'
-            'Todos')
+            'Inativo')
         end
-        object EditPalavraChave: TEdit
+        object EditPalavraChaveFiltro: TEdit
           Left = 567
           Top = 12
           Width = 121
           Height = 23
           Hint = 'Busca Por Palavra Chave'
           TabOrder = 1
-          Text = 'EditPalavraChave'
+          Text = 'EditPalavraChaveFiltro'
         end
         object Button14: TButton
           Left = 694
@@ -475,49 +470,109 @@ object TelaCadastro: TTelaCadastro
           Height = 37
           Caption = 'Filtrar'
           TabOrder = 2
+          OnClick = Button14Click
         end
       end
     end
   end
-  object ADOConnection1: TADOConnection
-    Connected = True
-    ConnectionString = 
-      'Provider=SQLOLEDB.1;Integrated Security=SSPI;Persist Security In' +
-      'fo=False;Initial Catalog=cadastro;Data Source=DESKTOP-E23FT73'
-    Provider = 'SQLOLEDB.1'
-    Left = 154
-    Top = 36
+  object FDMemTableUsuario: TFDMemTable
+    FetchOptions.AssignedValues = [evMode]
+    FetchOptions.Mode = fmAll
+    ResourceOptions.AssignedValues = [rvSilentMode]
+    ResourceOptions.SilentMode = True
+    UpdateOptions.AssignedValues = [uvCheckRequired, uvAutoCommitUpdates]
+    UpdateOptions.CheckRequired = False
+    UpdateOptions.AutoCommitUpdates = True
+    Left = 57
+    Top = 469
+    object FDMemTableUsuarioNome: TStringField
+      FieldName = 'Nome'
+      Size = 250
+    end
+    object FDMemTableUsuarioDataNascimento: TDateTimeField
+      FieldName = 'DataNascimento'
+      EditMask = '!99/99/0000;1;_'
+    end
+    object FDMemTableUsuarioAtivo: TStringField
+      FieldName = 'Ativo'
+    end
+    object FDMemTableUsuarioUsuarioId: TIntegerField
+      FieldName = 'UsuarioId'
+    end
+    object FDMemTableUsuarioEmail: TWideStringField
+      FieldName = 'Email'
+      Size = 200
+    end
   end
-  object ADOQuery1: TADOQuery
-    Connection = ADOConnection1
+  object DataSourceUsuario: TDataSource
+    DataSet = FDMemTableUsuario
+    Left = 145
+    Top = 469
+  end
+  object DataSourceDependente: TDataSource
+    DataSet = FDMemTableDependente
+    Left = 378
+    Top = 469
+  end
+  object FDMemTableDependente: TFDMemTable
+    FetchOptions.AssignedValues = [evMode]
+    FetchOptions.Mode = fmAll
+    ResourceOptions.AssignedValues = [rvSilentMode]
+    ResourceOptions.SilentMode = True
+    UpdateOptions.AssignedValues = [uvCheckRequired, uvAutoCommitUpdates]
+    UpdateOptions.CheckRequired = False
+    UpdateOptions.AutoCommitUpdates = True
+    Left = 282
+    Top = 469
+    object FDMemTableDependenteNome: TStringField
+      FieldName = 'Nome'
+    end
+    object FDMemTableDependenteIdade: TIntegerField
+      FieldName = 'Idade'
+    end
+  end
+  object ADOQueryListaUsuario: TADOQuery
+    Connection = DataModulePrincipal.ADOConnection1
     CursorType = ctStatic
     Parameters = <>
     SQL.Strings = (
-      'select * from Usuario')
-    Left = 242
-    Top = 37
-    object ADOQuery1UsuarioID: TAutoIncField
+      'SELECT'
+      #9'UsuarioId,'
+      #9'Nome,'
+      #9'Email,'
+      #9'DataNascimento,'
+      #9'Ativo,'
+      #9'Foto'
+      'FROM '
+      '                Usuario')
+    Left = 530
+    Top = 477
+    object ADOQueryListaUsuarioUsuarioID: TAutoIncField
       FieldName = 'UsuarioID'
       ReadOnly = True
     end
-    object ADOQuery1Nome: TStringField
+    object ADOQueryListaUsuarioNome: TStringField
       FieldName = 'Nome'
       Size = 100
     end
-    object ADOQuery1DataNascimento: TWideStringField
+    object ADOQueryListaUsuarioEmail: TStringField
+      FieldName = 'Email'
+      Size = 255
+    end
+    object ADOQueryListaUsuarioDataNascimento: TWideStringField
       FieldName = 'DataNascimento'
       Size = 10
     end
-    object ADOQuery1Ativo: TIntegerField
+    object ADOQueryListaUsuarioAtivo: TIntegerField
       FieldName = 'Ativo'
     end
-    object ADOQuery1Foto: TBlobField
+    object ADOQueryListaUsuarioFoto: TBlobField
       FieldName = 'Foto'
     end
   end
-  object DataSource1: TDataSource
-    DataSet = ADOQuery1
-    Left = 306
-    Top = 34
+  object DataSourceListaUsuario: TDataSource
+    DataSet = ADOQueryListaUsuario
+    Left = 626
+    Top = 478
   end
 end

@@ -1,0 +1,48 @@
+unit uUsuarioExceptions;
+
+interface
+
+uses
+  SysUtils;
+
+type
+  EFileSizeExceededException = class(Exception)
+  public
+    constructor Create(const Msg: string);
+  end;
+
+  EInvalidEmailException = class(Exception)
+  public
+    constructor Create(const Msg: string);
+  end;
+
+  EInvalidAgeException = class(Exception)
+  public
+    constructor Create(const Msg: string);
+  end;
+
+
+implementation
+
+{ EFileSizeExceededException }
+
+constructor EFileSizeExceededException.Create(const Msg: string);
+begin
+  inherited Create(Msg);
+end;
+
+{ EInvalidEmailException }
+
+constructor EInvalidEmailException.Create(const Msg: string);
+begin
+  inherited Create(Msg);
+end;
+
+{ EInvalidAgeException }
+constructor EInvalidAgeException.Create(const Msg: string);
+begin
+  inherited Create(Msg);
+end;
+
+
+end.

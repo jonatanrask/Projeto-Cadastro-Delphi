@@ -1,0 +1,153 @@
+unit uDependente;
+
+interface
+  uses
+    UDependente.intf, System.Generics.Collections;
+
+  type TDependente = class(TInterfacedObject, IDependente)
+    private
+      FDependeteId  : Integer;
+      FNome         : String;
+      FIdade        : Integer;
+      FUsuarioId    : Integer;
+
+    public
+      constructor Create(const Value: Integer);
+      destructor Destroy; override;
+
+      function GetDependenteId      : Integer;
+      function GetNome              : String;
+      function GetIdade             : Integer;
+      function GetUsuarioID         : Integer;
+      function CarregarDependentes  : TList<TDependente>;
+
+      procedure SetDependenteId(const Value: Integer);
+      procedure SetNome(const Value: String);
+      procedure SetIDade(const Value: Integer);
+      procedure SetUsuarioId(const Value: Integer);
+      procedure Criar;
+      procedure Deletar;
+
+      property DependenteId : Integer read GetDependenteId   write SetDependenteId;
+      property Nome         : String  read GetNome            write SetNome;
+      property Idade        : Integer read GetIdade           write SetIDade;
+      property UsuarioId    : Integer read GetUsuarioID       write SetUsuarioID;
+  end;
+
+implementation
+  uses
+    uDependenteConexao, uDependenteExceptions, System.SysUtils;
+
+constructor TDependente.Create(const Value: Integer);
+begin
+  UsuarioID := Value;
+end;
+
+destructor TDependente.Destroy;
+begin
+ /// FDependentes.Free;
+  DataModuleDependente.ADOQueryDependente.Close;
+  inherited;
+end;
+
+function TDependente.GetDependenteID: Integer;
+begin
+  Result := FDependeteId;
+end;
+
+function TDependente.GetNome: String;
+begin
+  Result := FNome;
+end;
+
+function TDependente.GetIdade: Integer;
+begin
+  Result := FIdade;
+end;
+
+function TDependente.GetUsuarioID: Integer;
+begin
+  Result := FUsuarioID;
+end;
+
+procedure TDependente.SetDependenteId(const Value: Integer);
+begin
+  FDependeteId := Value;
+end;
+
+procedure TDependente.SetNome(const Value: String);
+begin
+  if Trim(Value) = '' then
+    raise ENameEmptyException.Create('Nome não pode ser vazio.')
+  else
+    FNome := Value;
+end;
+
+procedure TDependente.SetIdade(const Value: Integer);
+begin
+  if Value >= 120 then
+    raise EInvalidAgeException.Create('A idade fornecida é superior a 120 anos.')
+  else
+    FIdade := Value;
+end;
+
+procedure TDependente.SetUsuarioID(const Value: Integer);
+begin
+  FUsuarioID := Value;
+end;
+
+function TDependente.CarregarDependentes: TList<TDependente>;
+var
+  Dependente: TDependente;
+begin
+  with DataModuleDependente.ADOQueryDependente do
+  begin
+    Parameters.ParambyName('UsuarioID').Value := UsuarioId;
+    Open;
+    try
+      while not Eof do
+      begin
+        Dependente               := TDependente.Create(FieldByName('UsuarioID').AsInteger);
+        Dependente.FDependeteId  := FieldByName('DependenteId').AsInteger;
+        Dependente.FNome         := FieldByName('Nome').AsString;
+        Dependente.FIdade        := FieldByName('Idade').AsInteger;
+        Dependente.FUsuarioId    := FieldByName('UsuarioID').AsInteger;
+        Result.Add(Dependente);
+        Next;
+      end;
+    finally
+      Close;
+    end;
+  end;
+end;
+
+procedure TDependente.Criar;
+begin
+  with DataModuleDependente.ADOQueryDependente do
+  begin
+    Open;
+    Insert;
+    FieldByName('Nome').AsString := Nome;
+    FieldByName('Idade').AsInteger := Idade;
+    FieldByName('UsuarioId').AsInteger := UsuarioId;
+    Post;
+  end;
+
+end;
+
+procedure TDependente.Deletar;
+begin
+  with DataModuleDependente.ADOQueryDependenteDelete do
+  begin
+    Open;
+    Insert;
+    FieldByName('Nome').AsString := Nome;
+    FieldByName('Idade').AsInteger := Idade;
+    FieldByName('UsuarioId').AsInteger := UsuarioId;
+    Post;
+  end;
+
+end;
+
+
+end.

@@ -1,0 +1,22 @@
+unit uDependenteExceptions;
+
+interface
+
+uses
+  SysUtils;
+
+type
+  ENameEmptyException = class(Exception)
+  public
+    constructor Create(const Msg: string);
+  end;
+
+  EInvalidAgeException = class(Exception)
+  public
+    constructor Create(const Msg: string);
+  end;
+
+
+implementation
+
+end.
